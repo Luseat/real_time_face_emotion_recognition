@@ -1,0 +1,69 @@
+# 🎭 Real-time Face Emotion Recognition
+
+Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganalisis ekspresi/emosi manusia secara *real-time* langsung dari webcam.
+
+## ✨ Fitur Utama
+- **Real-time Face Detection:** Melacak posisi wajah menggunakan algoritma MTCNN yang sangat akurat.
+- **Emotion Recognition:** Mengenali 7 jenis emosi dominan (Happy, Sad, Angry, Fear, Surprise, Disgust, Neutral).
+- **Live UI Dashboard:** Menampilkan *bounding box* (kotak hijau) di sekitar wajah pada video, beserta daftar lengkap persentase setiap emosi di panel samping.
+
+## 🛠️ Tech Stack
+- **Python** (Bahasa pemrograman utama)
+- **[Streamlit](https://streamlit.io/)** (Framework untuk merender Web UI)
+- **[OpenCV](https://opencv.org/)** (Untuk memproses video & webcam)
+- **[DeepFace](https://github.com/serengil/deepface)** (Pustaka AI *Deep Learning* untuk membaca emosi)
+- **MTCNN** (Model khusus untuk pendeteksi letak wajah)
+
+---
+
+## 🚀 Panduan Instalasi & Penggunaan
+
+### 1. Prasyarat
+- Pastikan sudah menginstal **Python (versi 3.8 atau lebih baru)** di komputer kamu.
+- Memiliki perangkat *webcam* yang aktif.
+
+### 2. Langkah-langkah Menjalankan Proyek
+
+**Langkah 1:** *Clone* repository ini ke komputer lokal kamu.
+```bash
+git clone https://github.com/username-kamu/real_time_face_emotion_recognition.git
+cd real_time_face_emotion_recognition
+```
+
+**Langkah 2:** Buat *Virtual Environment* agar library proyek ini tidak bentrok dengan proyek lain.
+```bash
+python -m venv venv
+```
+
+**Langkah 3:** Aktifkan *Virtual Environment* tersebut.
+- **Windows:**
+  ```powershell
+  .\venv\Scripts\activate
+  ```
+- **Mac/Linux:**
+  ```bash
+  source venv/bin/activate
+  ```
+
+**Langkah 4:** Instal seluruh *library* yang dibutuhkan.
+```bash
+pip install -r requirements.txt
+```
+
+**Langkah 5:** Jalankan aplikasinya! 🎉
+```bash
+streamlit run app.py
+```
+
+### 3. Cara Menggunakan
+1. Buka browser dan pergi ke tautan `http://localhost:8501` (jika tidak terbuka secara otomatis).
+2. Centang kotak **"Mulai Kamera"**.
+3. Izinkan browser untuk mengakses webcam.
+4. Tunjukkan berbagai ekspresi ke kamera, dan persentase emosi akan terus diperbarui secara *real-time*!
+
+> **⚠️ Penting:** Saat pertama kali dijalankan dan mendeteksi wajah, sistem (DeepFace) membutuhkan waktu beberapa detik untuk mengunduh model AI dari internet. Setelah selesai, proses deteksi akan berjalan instan dan mulus.
+
+---
+
+## 🤝 Kontribusi
+Jika kamu ingin menambahkan fitur baru atau menemukan *bug*, silakan *fork* repository ini dan buat *Pull Request*. Masukan sangat diapresiasi!
