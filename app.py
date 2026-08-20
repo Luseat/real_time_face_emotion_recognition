@@ -3,12 +3,38 @@ import cv2
 import numpy as np
 from deepface import DeepFace
 from PIL import Image
+from io import BytesIO
 
 st.set_page_config(page_title="Face Emotion Recognition", page_icon="🎭")
 st.title("🎭 Real-time Face Emotion Recognition")
 st.write("Aplikasi ini mendeteksi ekspresi wajah menggunakan webcam. Centang kotak di bawah untuk memulai.")
 
-# Inisialisasi state nyimpen riwayat screenshot
+def create_report_image(frame_rgb, details_text):
+    h, w, _ = frame_rgb.shape
+    canvas = np.ones((h, w + 300, 3), dtype=np.uint8) * 255
+    canvas[:, :w] = frame_rgb
+    
+
+    y0 = 40
+    cv2.putText(canvas, "Hasil Analisis Emosi:", (w + 20, y0), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+    y0 += 40
+    
+    
+    for line in details_text.split('\n'):
+        if line.strip():
+            clean_line = line.replace('**', '')
+            cv2.putText(canvas, clean_line, (w + 20, y0), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
+            y0 += 35
+            
+    return canvas
+
+def get_download_bytes(img_array, file_format='PNG'):
+    img = Image.fromarray(img_array)
+    buf = BytesIO()
+    img.save(buf, format=file_format)
+    return buf.getvalue()
+
+
 if 'screenshots' not in st.session_state:
     st.session_state.screenshots = []
 if 'current_frame' not in st.session_state:
@@ -16,7 +42,7 @@ if 'current_frame' not in st.session_state:
 if 'current_details' not in st.session_state:
     st.session_state.current_details = "Menunggu deteksi wajah..."
 
-# Layout Kontrol (Kamera & SS)
+# Layout Kontrol Kamera & SS
 ctrl1, ctrl2 = st.columns([1, 4])
 with ctrl1:
     run = st.checkbox('Mulai Kamera')
@@ -80,12 +106,11 @@ while run:
                 cv2.putText(frame, text, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
                 
     except Exception as e:
-        # Tampilkan error 
+        # Tampilkan error
         print(f"Error dari DeepFace: {e}")
         
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
-
     st.session_state.current_frame = frame_rgb
     st.session_state.current_details = details
     
@@ -96,14 +121,40 @@ else:
         camera.release()
     st.info("Kamera sedang dimatikan.")
 
+
 if len(st.session_state.screenshots) > 0:
     st.markdown("---")
     st.subheader("📸 Riwayat Screenshot")
     
-    # Maks 9 SS terakhir 
+    # Tampilkan maks 9 SS terakhir
     cols = st.columns(3)
     recent_shots = list(reversed(st.session_state.screenshots))[:9]
+    
     for idx, ss in enumerate(recent_shots):
         with cols[idx % 3]:
             st.image(ss['image'], use_container_width=True)
             st.markdown(ss['details'])
+            
+            report_img = create_report_image(ss['image'], ss['details'])
+            
+            png_bytes = get_download_bytes(report_img, file_format='PNG')
+            pdf_bytes = get_download_bytes(report_img, file_format='PDF')
+            
+            
+            dl_col1, dl_col2 = st.columns(2)
+            with dl_col1:
+                st.download_button(
+                    label="⬇️ .PNG",
+                    data=png_bytes,
+                    file_name=f"hasil_emosi_{idx}.png",
+                    mime="image/png",
+                    key=f"dl_png_{idx}"
+                )
+            with dl_col2:
+                st.download_button(
+                    label="⬇️ .PDF",
+                    data=pdf_bytes,
+                    file_name=f"hasil_emosi_{idx}.pdf",
+                    mime="application/pdf",
+                    key=f"dl_pdf_{idx}"
+                )
