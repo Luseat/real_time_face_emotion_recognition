@@ -4,6 +4,7 @@ import numpy as np
 from deepface import DeepFace
 from PIL import Image
 from io import BytesIO
+import pandas as pd
 
 st.set_page_config(page_title="Face Emotion Recognition", page_icon="🎭")
 st.title("🎭 Real-time Face Emotion Recognition")
@@ -14,11 +15,9 @@ def create_report_image(frame_rgb, details_text):
     canvas = np.ones((h, w + 300, 3), dtype=np.uint8) * 255
     canvas[:, :w] = frame_rgb
     
-
     y0 = 40
     cv2.putText(canvas, "Hasil Analisis Emosi:", (w + 20, y0), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
     y0 += 40
-    
     
     for line in details_text.split('\n'):
         if line.strip():
@@ -35,14 +34,19 @@ def get_download_bytes(img_array, file_format='PNG'):
     return buf.getvalue()
 
 
+# INISIALISASI STATE
 if 'screenshots' not in st.session_state:
     st.session_state.screenshots = []
 if 'current_frame' not in st.session_state:
     st.session_state.current_frame = None
 if 'current_details' not in st.session_state:
     st.session_state.current_details = "Menunggu deteksi wajah..."
+if 'emotion_history' not in st.session_state:
+    st.session_state.emotion_history = {
+        'happy': [], 'sad': [], 'angry': [], 'fear': [], 'surprise': [], 'disgust': [], 'neutral': []
+    }
 
-# Layout Kontrol Kamera & SS
+# LAYOUT ATAS 
 ctrl1, ctrl2 = st.columns([1, 4])
 with ctrl1:
     run = st.checkbox('Mulai Kamera')
@@ -63,6 +67,10 @@ with col1:
 with col2:
     st.markdown("### Detail Emosi")
     emotion_text_placeholder = st.empty()
+
+st.markdown("---")
+st.markdown("### 📈 Grafik Fluktuasi Emosi (Real-time)")
+chart_placeholder = st.empty()
 
 camera = None
 
@@ -88,26 +96,38 @@ while run:
             x, y, w, h = region['x'], region['y'], region['w'], region['h']
             
             if w > 0 and h > 0:
-                
                 all_emotions = face_info['emotion']
+                
+
                 details = ""
                 for em_name, em_score in all_emotions.items():
                     details += f"**{em_name.capitalize()}**: {em_score:.2f}%\n\n"
                 emotion_text_placeholder.markdown(details)
                 
+                for em in st.session_state.emotion_history.keys():
+                    # Skor emosi, default 0 jika tidak ada
+                    score_val = all_emotions.get(em, 0.0)
+                    st.session_state.emotion_history[em].append(score_val)
+                    # riwayat maksimal 50 frame terakhir
+                    if len(st.session_state.emotion_history[em]) > 50:
+                        st.session_state.emotion_history[em].pop(0)
+                
+
+                df_chart = pd.DataFrame(st.session_state.emotion_history)
+                chart_placeholder.line_chart(df_chart)
+                
+                # Warna Kotak dan Teks Emosi
                 emotion = face_info['dominant_emotion']
                 score = face_info['emotion'][emotion]
                 
-                # Gambar kotak RGB
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                
-                # Tulis label emosi
                 text = f"{emotion}: {score:.1f}%"
                 cv2.putText(frame, text, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
                 
+                break
+                
     except Exception as e:
-        # Tampilkan error
-        print(f"Error dari DeepFace: {e}")
+        print(f"Error dari DeepFace: {e}")  # Tampilkan error
         
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
@@ -122,13 +142,13 @@ else:
     st.info("Kamera sedang dimatikan.")
 
 
+# BAGIAN SCREENSHOT & DOWNLOAD 
 if len(st.session_state.screenshots) > 0:
     st.markdown("---")
     st.subheader("📸 Riwayat Screenshot")
     
-    # Tampilkan maks 9 SS terakhir
     cols = st.columns(3)
-    recent_shots = list(reversed(st.session_state.screenshots))[:9]
+    recent_shots = list(reversed(st.session_state.screenshots))[:9] # maks 9 SS terakhir
     
     for idx, ss in enumerate(recent_shots):
         with cols[idx % 3]:
@@ -139,7 +159,6 @@ if len(st.session_state.screenshots) > 0:
             
             png_bytes = get_download_bytes(report_img, file_format='PNG')
             pdf_bytes = get_download_bytes(report_img, file_format='PDF')
-            
             
             dl_col1, dl_col2 = st.columns(2)
             with dl_col1:

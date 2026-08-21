@@ -4,3 +4,5 @@ deepface
 tf-keras
 Pillow
 numpy
+pandas
+mtcnn
