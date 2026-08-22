@@ -5,7 +5,7 @@ Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganali
 ## ✨ Fitur Utama
 - **Real-time Face Detection:** Melacak posisi wajah menggunakan algoritma MTCNN yang sangat akurat.
 - **Emotion Recognition:** Mengenali 7 jenis emosi dominan (Happy, Sad, Angry, Fear, Surprise, Disgust, Neutral).
-- **Live UI Dashboard:** Menampilkan *bounding box* (kotak hijau) di sekitar wajah pada video, beserta daftar lengkap persentase setiap emosi di panel samping.
+- **Live UI Dashboard & Chart:** Menampilkan *bounding box* di sekitar wajah, daftar persentase emosi, serta **grafik fluktuasi emosi yang bergerak secara real-time**.
 - **📸 Screenshot & Export Laporan:** 
   - Simpan momen ekspresi secara instan ke dalam Galeri Riwayat.
   - Unduh hasil tangkapan layar yang sudah digabung secara otomatis dengan teks detail persentase emosi.
@@ -17,7 +17,24 @@ Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganali
 - **[OpenCV](https://opencv.org/)** (Untuk memproses video & membuat kanvas laporan gambar)
 - **[Pillow (PIL)](https://python-pillow.org/)** (Untuk konversi format ke PDF/PNG)
 - **[DeepFace](https://github.com/serengil/deepface)** (Pustaka AI *Deep Learning* untuk membaca emosi)
+- **[Pandas](https://pandas.pydata.org/)** (Untuk memproses memori data *chart* emosi)
 - **MTCNN** (Model khusus untuk pendeteksi letak wajah)
+
+---
+
+## 📁 Struktur Proyek
+Proyek ini mengadopsi struktur *modular* (pemisahan *UI* dan logika proses pendukung) agar kode lebih rapi, *clean*, dan mudah dikembangkan (*scalable*).
+```text
+real_time_face_emotion_recognition/
+│
+├── utils/
+│   └── image_processing.py    # Berisi fungsi konversi kanvas & export (PNG/PDF)
+│
+├── app.py                     # Skrip utama yang mengatur UI Streamlit & Kamera
+├── requirements.txt           # Daftar seluruh library dependensi
+├── .gitignore                 # Konfigurasi pengecualian file git (seperti venv)
+└── README.md                  # Dokumentasi proyek
+```
 
 ---
 
@@ -61,19 +78,15 @@ streamlit run app.py
 ```
 
 ### 3. Cara Menggunakan
-1. Buka browser dan pergi ke tautan `http://localhost:8501` (jika tidak terbuka secara otomatis).
+1. Buka browser dan pergi ke tautan `http://localhost:8501`.
 2. Centang kotak **"Mulai Kamera"** dan izinkan akses webcam.
-3. Tunjukkan berbagai ekspresi ke kamera, dan persentase emosi akan terus diperbarui secara *real-time*.
+3. Tunjukkan berbagai ekspresi ke kamera, persentase dan grafik fluktuasi emosi akan diperbarui secara *real-time*.
 4. Klik tombol **"📸 Ambil Screenshot"** untuk menyimpan momen saat ini.
-5. Gulir ke bawah ke bagian **Riwayat Screenshot**, lalu klik tombol **⬇️ .PNG** atau **⬇️ .PDF** untuk mengunduh laporan analisis wajah lengkap dengan detail emosinya ke laptop kamu!
+5. Gulir ke bawah ke bagian **Riwayat Screenshot**, lalu klik tombol **⬇️ .PNG** atau **⬇️ .PDF** untuk mengunduh laporan analisis wajah!
 
-> **⚠️ Penting:** Saat pertama kali dijalankan dan mendeteksi wajah, sistem (DeepFace) membutuhkan waktu beberapa detik untuk mengunduh model AI dari internet. Setelah selesai, proses deteksi akan berjalan instan dan mulus.
+> **⚠️ Penting:** Saat pertama kali dijalankan dan mendeteksi wajah, sistem (DeepFace) membutuhkan waktu beberapa detik untuk mengunduh model AI. Setelah itu proses akan berjalan mulus.
 
 ---
 
 ## 🤝 Kontribusi
 Jika kamu ingin menambahkan fitur baru atau menemukan *bug*, silakan *fork* repository ini dan buat *Pull Request*. Masukan sangat diapresiasi!
-
-
----
-<p align="center">Copyright &copy; 2026 Hanifudin Robbani | All Rights Reserved.</p>

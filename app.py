@@ -44,7 +44,7 @@ with col2:
     emotion_text_placeholder = st.empty()
 
 st.markdown("---")
-st.markdown("### 📈 Grafik Fluktuasi Emosi (Real-time)")
+st.markdown("###  Grafik Fluktuasi Emosi (Real-time)")
 chart_placeholder = st.empty()
 
 camera = None
