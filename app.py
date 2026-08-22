@@ -2,37 +2,12 @@ import streamlit as st
 import cv2
 import numpy as np
 from deepface import DeepFace
-from PIL import Image
-from io import BytesIO
 import pandas as pd
+from utils.image_processing import create_report_image, get_download_bytes
 
 st.set_page_config(page_title="Face Emotion Recognition", page_icon="🎭")
 st.title("🎭 Real-time Face Emotion Recognition")
 st.write("Aplikasi ini mendeteksi ekspresi wajah menggunakan webcam. Centang kotak di bawah untuk memulai.")
-
-def create_report_image(frame_rgb, details_text):
-    h, w, _ = frame_rgb.shape
-    canvas = np.ones((h, w + 300, 3), dtype=np.uint8) * 255
-    canvas[:, :w] = frame_rgb
-    
-    y0 = 40
-    cv2.putText(canvas, "Hasil Analisis Emosi:", (w + 20, y0), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
-    y0 += 40
-    
-    for line in details_text.split('\n'):
-        if line.strip():
-            clean_line = line.replace('**', '')
-            cv2.putText(canvas, clean_line, (w + 20, y0), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 1)
-            y0 += 35
-            
-    return canvas
-
-def get_download_bytes(img_array, file_format='PNG'):
-    img = Image.fromarray(img_array)
-    buf = BytesIO()
-    img.save(buf, format=file_format)
-    return buf.getvalue()
-
 
 # INISIALISASI STATE
 if 'screenshots' not in st.session_state:
@@ -142,7 +117,7 @@ else:
     st.info("Kamera sedang dimatikan.")
 
 
-# BAGIAN SCREENSHOT & DOWNLOAD 
+# SCREENSHOT & DOWNLOAD 
 if len(st.session_state.screenshots) > 0:
     st.markdown("---")
     st.subheader("📸 Riwayat Screenshot")
