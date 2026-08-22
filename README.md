@@ -90,3 +90,7 @@ streamlit run app.py
 
 ## 🤝 Kontribusi
 Jika kamu ingin menambahkan fitur baru atau menemukan *bug*, silakan *fork* repository ini dan buat *Pull Request*. Masukan sangat diapresiasi!
+
+
+---
+<p align="center">Copyright &copy; 2026 Hanifudin Robbani | All Rights Reserved.</p>
