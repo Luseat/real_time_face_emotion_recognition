@@ -33,7 +33,7 @@ real_time_face_emotion_recognition/
 ├── app.py                     # Skrip utama yang mengatur UI Streamlit & Kamera
 ├── requirements.txt           # Daftar seluruh library dependensi
 ├── .gitignore                 # Konfigurasi pengecualian file git (seperti venv)
-└── README.md                  # Dokumentasi proyek
+└── README.md                  # Panduan project
 ```
 
 ---
