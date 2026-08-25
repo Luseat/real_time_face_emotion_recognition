@@ -10,8 +10,8 @@ Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganali
 - **Real-time Face Detection:** Melacak posisi wajah menggunakan algoritma MTCNN yang sangat akurat.
 - **Emotion Recognition:** Mengenali 7 jenis emosi dominan (Happy, Sad, Angry, Fear, Surprise, Disgust, Neutral).
 - **Live UI Dashboard & Chart:** Menampilkan *bounding box* di sekitar wajah, daftar persentase emosi, serta **grafik fluktuasi emosi yang bergerak secara real-time**.
-- ** Optimasi Performa (Frame Skipping):** Menghindari lag pada mode Live Webcam dengan menganalisis AI setiap kelipatan 5 frame, menjaga FPS video tetap *smooth* dan ringan di CPU.
-- **📸 Screenshot & Export Laporan:** 
+- **Optimasi Performa (Frame Skipping):** Menghindari lag pada mode Live Webcam dengan menganalisis AI setiap kelipatan 5 frame, menjaga FPS video tetap *smooth* dan ringan di CPU.
+- **Screenshot & Export Laporan:** 
   - Simpan momen ekspresi secara instan ke dalam Galeri Riwayat.
   - Unduh hasil tangkapan layar (gabungan foto & detail persentase emosi) dalam format **.PNG** (Gambar) atau **.PDF** (Dokumen).
 
