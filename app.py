@@ -5,7 +5,7 @@ import pandas as pd
 from PIL import Image
 import tempfile
 import os
-from utils.image_processing import create_report_image, get_download_bytes, process_and_draw_face
+from utils.image_processing import create_report_image, get_download_bytes, process_and_draw_face, cari_muka_pake_AI, gambar_kotak_hijau
 
 st.set_page_config(page_title="Face Emotion Recognition", page_icon="🎭")
 st.title("🎭 Real-time Face Emotion Recognition")
@@ -60,7 +60,7 @@ with col2:
     emotion_text_placeholder = st.empty()
 
 st.markdown("---")
-st.markdown("### 📈 Grafik Fluktuasi Emosi")
+st.markdown("### Grafik Fluktuasi Emosi")
 chart_placeholder = st.empty()
 
 
@@ -68,13 +68,30 @@ if input_mode == "📸 Webcam Live":
     run = st.checkbox('Mulai Kamera')
     if run:
         camera = cv2.VideoCapture(0)
+        
+        frame_count = 0
+        data_simpanan = None
+        
+        
         while run:
             ret, frame = camera.read()
             if not ret:
                 st.error("Gagal mengakses webcam!")
                 break
+            
+            frame_count += 1
+            
+            if frame_count % 5 == 0:
+                data_simpanan = cari_muka_pake_AI(frame)
+            
+            if data_simpanan is not None:
+                frame_rgb, details, emotions_dict = gambar_kotak_hijau(frame, data_simpanan)
+            else:
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                details = "Menunggu deteksi wajah..."
+                emotions_dict = None
                 
-            frame_rgb, details, emotions_dict = process_and_draw_face(frame)
+            # frame_rgb, details, emotions_dict = process_and_draw_face(frame)
             
             
             st.session_state.current_frame = frame_rgb
@@ -137,7 +154,7 @@ if len(st.session_state.screenshots) > 0:
     st.subheader("📸 Riwayat Screenshot Laporan")
     
     cols = st.columns(3)
-    recent_shots = list(reversed(st.session_state.screenshots))[:9]
+    recent_shots = list(reversed(st.session_state.screenshots))[:9] # maks 9 SS terakhir
     
     for idx, ss in enumerate(recent_shots):
         with cols[idx % 3]:

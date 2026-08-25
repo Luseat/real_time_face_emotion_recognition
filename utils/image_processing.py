@@ -64,3 +64,43 @@ def process_and_draw_face(frame):
         
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     return frame_rgb, details, emotions_dict
+
+def cari_muka_pake_AI(frame):
+    """Fungsi 1: Mikir pake AI, nyari data letak muka dan emosi"""
+    try:
+        results = DeepFace.analyze(frame, actions=['emotion'], enforce_detection=False, detector_backend='mtcnn')
+        if isinstance(results, dict):
+            results = [results]
+    
+        for face_info in results:
+            if face_info['region']['w']> 0 and face_info['region']['h']>0:
+                return face_info
+    except Exception as e:
+        print(f"Error AI: {e}")
+        
+    return None
+
+def gambar_kotak_hijau(frame, face_info):
+    """Fungsi 2: Cuma nggambar kotak di atas foto pakai data simpanan"""
+    emotions_dict = face_info['emotion']
+    
+    
+    details = ""
+    for em_name, em_score in emotions_dict.items():
+        details += f"**{em_name.capitalize()}**: {em_score:.2f}%\n\n"
+        
+    
+    region = face_info['region']
+    x,y,w,h = region['x'], region['y'], region['w'], region['h']
+    
+    emotion = face_info['dominant_emotion']
+    score = face_info['emotion'][emotion]
+    
+    cv2.rectangle(frame, (x,y), (x+w, y+h), (0, 255, 0), 2)
+    text = f"{emotion}: {score:.1f}%"
+    cv2.putText(frame, text, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+    
+    
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    
+    return frame_rgb, details, emotions_dict
