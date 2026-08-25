@@ -2,7 +2,7 @@
 
 Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganalisis ekspresi/emosi manusia secara *real-time*.
 
-## ✨ Fitur Utama
+##  Fitur Utama
 - **Multi-Input Mode:** Mendukung 3 jenis sumber masukan:
   1. 📸 **Webcam Live**: Analisis emosi langsung dari kamera.
   2. 🖼️ **Upload Foto**: Unggah file `.png`, `.jpg`, atau `.jpeg` untuk deteksi gambar statis.
@@ -10,12 +10,12 @@ Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganali
 - **Real-time Face Detection:** Melacak posisi wajah menggunakan algoritma MTCNN yang sangat akurat.
 - **Emotion Recognition:** Mengenali 7 jenis emosi dominan (Happy, Sad, Angry, Fear, Surprise, Disgust, Neutral).
 - **Live UI Dashboard & Chart:** Menampilkan *bounding box* di sekitar wajah, daftar persentase emosi, serta **grafik fluktuasi emosi yang bergerak secara real-time**.
-- **⚡ Optimasi Performa (Frame Skipping):** Menghindari lag pada mode Live Webcam dengan menganalisis AI setiap kelipatan 5 frame, menjaga FPS video tetap *smooth* dan ringan di CPU.
+- ** Optimasi Performa (Frame Skipping):** Menghindari lag pada mode Live Webcam dengan menganalisis AI setiap kelipatan 5 frame, menjaga FPS video tetap *smooth* dan ringan di CPU.
 - **📸 Screenshot & Export Laporan:** 
   - Simpan momen ekspresi secara instan ke dalam Galeri Riwayat.
   - Unduh hasil tangkapan layar (gabungan foto & detail persentase emosi) dalam format **.PNG** (Gambar) atau **.PDF** (Dokumen).
 
-## 🛠️ Tech Stack
+##  Tech Stack
 - **Python** (Bahasa pemrograman utama)
 - **[Streamlit](https://streamlit.io/)** (Framework untuk merender Web UI)
 - **[OpenCV](https://opencv.org/)** (Untuk memproses video & membuat kanvas laporan gambar)
@@ -42,7 +42,7 @@ real_time_face_emotion_recognition/
 
 ---
 
-## 🚀 Panduan Instalasi & Penggunaan
+##  Panduan Instalasi & Penggunaan
 
 ### 1. Prasyarat
 - Pastikan sudah menginstal **Python (versi 3.8 atau lebih baru)** di komputer kamu.
