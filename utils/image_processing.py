@@ -59,9 +59,11 @@ def cari_muka_pake_AI(frame):
     return None
 
 def gambar_kotak_hijau(frame, daftar_wajah): 
-    """Fungsi 2: Gambar kotak untuk banyak atau semua wajah"""
+    """Fungsi 2: Gambar kotak dan ngatur teks UI (Beda buat 1 muka vs Banyak muka)"""
     details = ""
     emotions_dict_utama = None
+    
+    jumlah_wajah = len(daftar_wajah) # Berapa muka yang kedeteksi
     
     # Looping gambar kotak sebanyak muka yang ketemu
     for i, face_info in enumerate(daftar_wajah):
@@ -71,11 +73,14 @@ def gambar_kotak_hijau(frame, daftar_wajah):
         if i == 0:
             emotions_dict_utama = emotions_dict
         
-        # Teks rincian per orang
-        details += f"## Wajah {i+1}\n"
-        for em_name, em_score in emotions_dict.items():
-            details += f"**{em_name.capitalize()}**: {em_score:.2f}%\n"
-        details += "\n---\n\n"
+        if jumlah_wajah == 1:
+            for em_name, em_score in emotions_dict.items():
+                details += f"**{em_name.capitalize()}**: {em_score:.2f}%\n\n"
+        else:
+            details += f"### Wajah {i+1}\n" 
+            for em_name, em_score in emotions_dict.items():
+                details += f"**{em_name.capitalize()}**: {em_score:.2f}%  \n"
+            details += "\n---\n\n"
             
             
         region = face_info['region']
@@ -85,7 +90,10 @@ def gambar_kotak_hijau(frame, daftar_wajah):
         score = face_info['emotion'][emotion]
         
         cv2.rectangle(frame, (x,y), (x+w, y+h), (0, 255, 0), 2)
-        text = f"Wajah {i+1}: {emotion}"
+        if jumlah_wajah == 1:
+            text = f"{emotion}: {score:.1f}%"
+        else:
+            text = f"Wajah {i+1}: {emotion}"
         cv2.putText(frame, text, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
     
     
