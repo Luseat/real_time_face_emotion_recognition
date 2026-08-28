@@ -91,8 +91,6 @@ if input_mode == "📸 Webcam Live":
                 details = "Menunggu deteksi wajah..."
                 emotions_dict = None
                 
-            # frame_rgb, details, emotions_dict = process_and_draw_face(frame)
-            
             
             st.session_state.current_frame = frame_rgb
             st.session_state.current_details = details
@@ -110,6 +108,14 @@ elif input_mode == "🖼️ Upload Foto":
         # Konversi hasil ke array OpenCV (BGR)
         image = Image.open(uploaded_file)
         frame = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+        
+        
+        tinggi, lebar = frame.shape[:2]
+        if lebar > 1200: # Resize foto raksasa
+            skala = 1200 / lebar
+            dimensi_baru = (1200, int(tinggi * skala))
+            frame = cv2.resize(frame, dimensi_baru, interpolation=cv2.INTER_AREA)
+        
         
         st.info("Memproses gambar...")
         frame_rgb, details, emotions_dict = process_and_draw_face(frame)
@@ -131,13 +137,27 @@ elif input_mode == "🎥 Upload Video":
             
             camera = cv2.VideoCapture(tfile.name)
             
+            frame_count = 0
+            data_simpanan = None
+            
             while run_video:
                 ret, frame = camera.read()
                 if not ret:
                     st.success("Pemutaran video selesai!")
-                    break 
+                    break
+                frame_count += 1
+                
+                # FRAME SKIPING (5frame/second)
+                if frame_count % 5 == 0:
+                    data_simpanan = cari_muka_pake_AI(frame)
+                if data_simpanan is not None:
+                    frame_rgb, details, emotions_dict = gambar_kotak_hijau(frame, data_simpanan)
+                else:
+                    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    details = "Menunggu deteksi wajah...."
+                    emotions_dict = None
                     
-                frame_rgb, details, emotions_dict = process_and_draw_face(frame)
+                #frame_rgb, details, emotions_dict = process_and_draw_face(frame)
                 
                 st.session_state.current_frame = frame_rgb
                 st.session_state.current_details = details
