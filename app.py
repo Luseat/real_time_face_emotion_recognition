@@ -183,3 +183,14 @@ if len(st.session_state.screenshots) > 0:
                     mime="application/pdf",
                     key=f"dl_pdf_{idx}"
                 )
+
+
+st.markdown("<br><br><br><br>", unsafe_allow_html=True)
+
+st.markdown("---")
+st.markdown(
+    "<p style='text-align: center; color: gray; margin-bottom: 5px;'>"
+    "Copyright &copy; 2026 Hanifudin Robbani | All Rights Reserved."
+    "</p>", 
+    unsafe_allow_html=True
+)
