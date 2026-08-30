@@ -30,10 +30,12 @@ if 'emotion_history' not in st.session_state:
 # Meminimalisir kode berulang 
 def update_ui_and_chart(details, emotions_dict, text_placeholder, chart_placeholder):
     text_placeholder.markdown(details)
+    
     if emotions_dict:
         for em in st.session_state.emotion_history.keys():
             score_val = emotions_dict.get(em, 0.0)
             st.session_state.emotion_history[em].append(score_val)
+            
             if len(st.session_state.emotion_history[em]) > 50:
                 st.session_state.emotion_history[em].pop(0)
     
@@ -43,6 +45,7 @@ def update_ui_and_chart(details, emotions_dict, text_placeholder, chart_placehol
 
 # LAYOUT ATAS 
 if st.button('📸 Ambil Screenshot Laporan'):
+    
     if st.session_state.current_frame is not None:
         st.session_state.screenshots.append({
             'image': st.session_state.current_frame,
@@ -66,15 +69,16 @@ chart_placeholder = st.empty()
 
 if input_mode == "📸 Webcam Live":
     run = st.checkbox('Mulai Kamera')
+    
     if run:
         camera = cv2.VideoCapture(0)
         
         frame_count = 0
         data_simpanan = None
         
-        
         while run:
             ret, frame = camera.read()
+            
             if not ret:
                 st.error("Gagal mengakses webcam!")
                 break
@@ -104,6 +108,7 @@ if input_mode == "📸 Webcam Live":
 
 elif input_mode == "🖼️ Upload Foto":
     uploaded_file = st.file_uploader("Upload foto mu di sini...", type=['png', 'jpg', 'jpeg'])
+    
     if uploaded_file is not None:
         # Konversi hasil ke array OpenCV (BGR)
         image = Image.open(uploaded_file)
@@ -111,7 +116,7 @@ elif input_mode == "🖼️ Upload Foto":
         
         
         tinggi, lebar = frame.shape[:2]
-        if lebar > 1200: # Resize foto raksasa
+        if lebar > 1200: # Resize foto berpixel besar
             skala = 1200 / lebar
             dimensi_baru = (1200, int(tinggi * skala))
             frame = cv2.resize(frame, dimensi_baru, interpolation=cv2.INTER_AREA)
@@ -128,8 +133,10 @@ elif input_mode == "🖼️ Upload Foto":
 
 elif input_mode == "🎥 Upload Video":
     uploaded_video = st.file_uploader("Upload video mu di sini...", type=['mp4', 'mov', 'avi'])
+    
     if uploaded_video is not None:
         run_video = st.checkbox('Putar & Analisis Video')
+        
         if run_video:
             
             tfile = tempfile.NamedTemporaryFile(delete=False) 
@@ -142,9 +149,17 @@ elif input_mode == "🎥 Upload Video":
             
             while run_video:
                 ret, frame = camera.read()
+                
                 if not ret:
                     st.success("Pemutaran video selesai!")
                     break
+                
+                tinggi, lebar = frame.shape[:2]
+                if lebar > 1200: # Resize foto berpixel besar
+                    skala = 1200 / lebar
+                    dimensi_baru = (1200, int(tinggi * skala))
+                    frame = cv2.resize(frame, dimensi_baru, interpolation=cv2.INTER_AREA)
+                
                 frame_count += 1
                 
                 # FRAME SKIPING (5frame/second)
@@ -177,6 +192,7 @@ if len(st.session_state.screenshots) > 0:
     recent_shots = list(reversed(st.session_state.screenshots))[:9] # maks 9 SS terakhir
     
     for idx, ss in enumerate(recent_shots):
+        
         with cols[idx % 3]:
             st.image(ss['image'], use_container_width=True)
             st.markdown(ss['details'])
