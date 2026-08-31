@@ -29,20 +29,20 @@ if 'emotion_history' not in st.session_state:
 
 # Meminimalisir kode berulang 
 def update_ui_and_chart(details, emotions_dict, text_placeholder, chart_placeholder):
-    text_placeholder.markdown(details)
+    # text_placeholder.markdown(details)
     
     text_placeholder.empty()
     with text_placeholder.container():
         parts = [p.strip() for p in details.split('---') if p.strip()]
         
-    if len(parts) > 0:
-        st.markdown(parts[0])
-        
-        if len(parts) > 1:
-            with st.expander("Lihat lainnya..."):
-                for extra in parts[1:]:
-                    st.markdown(extra)
-                    st.markdown("---")
+        if len(parts) > 0:
+            st.markdown(parts[0])
+            
+            if len(parts) > 1:
+                with st.expander("Lihat lainnya..."):
+                    for extra in parts[1:]:
+                        st.markdown(extra)
+                        st.markdown("---")
     
     if emotions_dict:
         
