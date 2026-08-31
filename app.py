@@ -31,7 +31,21 @@ if 'emotion_history' not in st.session_state:
 def update_ui_and_chart(details, emotions_dict, text_placeholder, chart_placeholder):
     text_placeholder.markdown(details)
     
+    text_placeholder.empty()
+    with text_placeholder.container():
+        parts = [p.strip() for p in details.split('---') if p.strip()]
+        
+    if len(parts) > 0:
+        st.markdown(parts[0])
+        
+        if len(parts) > 1:
+            with st.expander("Lihat lainnya..."):
+                for extra in parts[1:]:
+                    st.markdown(extra)
+                    st.markdown("---")
+    
     if emotions_dict:
+        
         for em in st.session_state.emotion_history.keys():
             score_val = emotions_dict.get(em, 0.0)
             st.session_state.emotion_history[em].append(score_val)
@@ -138,7 +152,6 @@ elif input_mode == "🎥 Upload Video":
         run_video = st.checkbox('Putar & Analisis Video')
         
         if run_video:
-            
             tfile = tempfile.NamedTemporaryFile(delete=False) 
             tfile.write(uploaded_video.read())
             
@@ -195,7 +208,17 @@ if len(st.session_state.screenshots) > 0:
         
         with cols[idx % 3]:
             st.image(ss['image'], use_container_width=True)
-            st.markdown(ss['details'])
+            parts = [p.strip()for p in ss['details'].split('---') if p.strip()]
+            
+            if len(parts) > 0:
+                st.markdown(parts[0])
+                
+            if len(parts) > 1:
+                with st.expander("Lihat lainnya..."):
+                    for extra in parts [1:]:
+                        st.markdown(extra)
+                        st.markdown("---")
+            # st.markdown(ss['details'])
             
             report_img = create_report_image(ss['image'], ss['details'])
             
