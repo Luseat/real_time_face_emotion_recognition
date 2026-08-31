@@ -7,10 +7,12 @@ Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganali
   -  📸 **Webcam Live**: Analisis emosi langsung dari kamera.
   -  🖼️ **Upload Foto**: Unggah file `.png`, `.jpg`, atau `.jpeg` untuk deteksi gambar statis.
   -  🎥 **Upload Video**: Unggah file rekaman video untuk dianalisis *frame-by-frame*.
-- **Multi-Face Detection & Dynamic UI:** Melacak posisi banyak wajah sekaligus dalam satu *frame*. Antarmuka teks (UI) otomatis menyesuaikan: format lebar yang nyaman dibaca untuk 1 wajah, dan format ringkas dengan penomoran untuk wajah yang berkerumun.
-- **Emotion Recognition:** Mengenali 7 jenis emosi dominan (Happy, Sad, Angry, Fear, Surprise, Disgust, Neutral).
+- **Multi-Face Detection & Dynamic UI:** Melacak posisi banyak wajah sekaligus dalam satu *frame*. Antarmuka teks (UI) otomatis menyesuaikan: format lebar yang nyaman dibaca untuk 1 wajah, dan format ringkas (dengan tombol "Show More") untuk wajah yang berkerumun.
+- **Emotion Recognition:** Mengenali 7 jenis emosi dominan (Happy, Sad, Angry, Fear, Surprise, Disgust, Neutral) beserta persentase akurasinya di setiap wajah.
 - **Live UI Dashboard & Chart:** Menampilkan *bounding box* di sekitar wajah, daftar persentase emosi, serta **grafik fluktuasi emosi yang bergerak secara real-time**.
-- **Optimasi Performa (Frame Skipping):** Menghindari lag pada mode Live Webcam dengan menganalisis AI setiap kelipatan 5 frame, menjaga FPS video tetap *smooth* dan ringan di CPU.
+- **Hardware & CPU Optimization:** 
+  - **Frame Skipping:** Menghindari lag pada mode Live/Video dengan menganalisis AI setiap kelipatan 5 frame, menjaga video tetap *smooth*.
+  - **Auto-Resize:** Secara otomatis menyusutkan foto/video beresolusi raksasa (4K/HD) agar proses AI (MTCNN) tidak membebani CPU hingga 100%.
 - **Screenshot & Export Laporan:** 
   - Simpan momen ekspresi secara instan ke dalam Galeri Riwayat.
   - Unduh hasil tangkapan layar (gabungan foto & detail persentase emosi) dalam format **.PNG** (Gambar) atau **.PDF** (Dokumen).
