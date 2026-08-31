@@ -93,7 +93,7 @@ def gambar_kotak_hijau(frame, daftar_wajah):
         if jumlah_wajah == 1:
             text = f"{emotion}: {score:.1f}%"
         else:
-            text = f"Wajah {i+1}: {emotion}"
+            text = f"Wajah {i+1}: {emotion} ({score:.1f}%)"
         cv2.putText(frame, text, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
     
     
