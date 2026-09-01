@@ -13,7 +13,7 @@ st.write("Aplikasi ini mendeteksi ekspresi wajah. Pilih mode input dari menu di 
 
 
 st.sidebar.title("Pengaturan Input")
-input_mode = st.sidebar.radio("Pilih Mode:", ["📸 Webcam Live", "🖼️ Upload Foto", "🎥 Upload Video"])
+input_mode = st.sidebar.radio("Pilih Mode:", ["📸 Webcam Live","🛜 Kamera HP", "🖼️ Upload Foto", "🎥 Upload Video"])
 
 # INISIALISASI STATE 
 if 'screenshots' not in st.session_state:
@@ -96,7 +96,6 @@ if input_mode == "📸 Webcam Live":
             if not ret:
                 st.error("Gagal mengakses webcam!")
                 break
-            
             frame_count += 1
             
             if frame_count % 5 == 0:
@@ -119,6 +118,46 @@ if input_mode == "📸 Webcam Live":
             
         camera.release()
         st.info("Kamera dimatikan.")
+        
+elif input_mode == "🛜 Kamera HP":
+    st.info("Pastikan HP dan Laptop terhubung di jaringan WiFi yang sama. Gunakan aplikasi 'IP Webcam' di HP Android")
+    
+    ip_url = st.text_input("Masukkan IP Camera URL", "")
+    
+    if ip_url != "":
+        run = st.checkbox("Mulai kamera HP")
+        
+        if run:
+            camera = cv2.VideoCapture(ip_url)
+            frame_count = 0
+            data_simpanan = None
+            
+            while run:
+                ret, frame = camera.read()
+                
+                if not ret:
+                    st.error("Gagal terhubung! Pastikan IP URL benar, pakai akhiran /video, dan aplikasi HP menyala.")
+                    break
+                frame_count += 1
+                
+                if frame_count % 5 == 0:
+                    data_simpanan = cari_muka_pake_AI(frame)
+                    
+                if data_simpanan is not None:
+                    frame_rgb, details, emotions_dict = gambar_kotak_hijau(frame, data_simpanan)
+                else:
+                    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    details = "Menunggu deteksi wajah..."
+                    emotions_dict = None
+                    
+                st.session_state.current_frame = frame_rgb
+                st.session_state.current_details = details
+                
+                FRAME_WINDOW.image(frame_rgb)
+                update_ui_and_chart(details, emotions_dict, emotion_text_placeholder, chart_placeholder)
+                
+            camera.release()
+            st.info("Kamera HP dimatikan")
 
 elif input_mode == "🖼️ Upload Foto":
     uploaded_file = st.file_uploader("Upload foto mu di sini...", type=['png', 'jpg', 'jpeg'])
