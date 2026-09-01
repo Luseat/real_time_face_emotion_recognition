@@ -122,7 +122,7 @@ if input_mode == "📸 Webcam Live":
 elif input_mode == "🛜 Kamera HP":
     st.info("Pastikan HP dan Laptop terhubung di jaringan WiFi yang sama. Gunakan aplikasi 'IP Webcam' di HP Android")
     
-    ip_url = st.text_input("Masukkan IP Camera URL", "")
+    ip_url = st.text_input("Masukkan IP Camera URL", "http://192.168.1.5:8080/video")
     
     if ip_url != "":
         run = st.checkbox("Mulai kamera HP")
@@ -138,6 +138,13 @@ elif input_mode == "🛜 Kamera HP":
                 if not ret:
                     st.error("Gagal terhubung! Pastikan IP URL benar, pakai akhiran /video, dan aplikasi HP menyala.")
                     break
+                
+                tinggi, lebar = frame.shape[:2]
+                if lebar > 720: #klo lebih 720px auto resize
+                    skala = 720 / lebar
+                    dimensi_baru = (720, int(tinggi * skala))
+                    frame = cv2.resize(frame, dimensi_baru, interpolation=cv2.INTER_AREA)
+                
                 frame_count += 1
                 
                 if frame_count % 5 == 0:
