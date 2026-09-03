@@ -3,8 +3,9 @@
 Aplikasi berbasis antarmuka web (Streamlit) untuk mendeteksi wajah dan menganalisis ekspresi/emosi manusia secara *real-time*.
 
 ##  Fitur Utama
-- **Multi-Input Mode:** Mendukung 3 jenis sumber masukan:
-  -  📸 **Webcam Live**: Analisis emosi langsung dari kamera.
+- **Multi-Input Mode:** Mendukung 4 jenis sumber masukan:
+  -  📸 **Webcam Live**: Analisis emosi langsung dari kamera bawaan perangkat.
+  -  🛜 **Kamera HP (Wireless IP Cam)**: Hubungkan kamera *smartphone* secara nirkabel via jaringan WiFi (mendukung URL *streaming* dari aplikasi IP Webcam).
   -  🖼️ **Upload Foto**: Unggah file `.png`, `.jpg`, atau `.jpeg` untuk deteksi gambar statis.
   -  🎥 **Upload Video**: Unggah file rekaman video untuk dianalisis *frame-by-frame*.
 - **Multi-Face Detection & Dynamic UI:** Melacak posisi banyak wajah sekaligus dalam satu *frame*. Antarmuka teks (UI) otomatis menyesuaikan: format lebar yang nyaman dibaca untuk 1 wajah, dan format ringkas (dengan tombol "Show More") untuk wajah yang berkerumun.
@@ -85,7 +86,7 @@ streamlit run app.py
 
 ### 3. Cara Menggunakan
 1. Buka browser dan pergi ke tautan `http://localhost:8501`.
-2. Di bagian **Sidebar (kiri)**, pilih mode yang kamu inginkan: *Webcam Live*, *Upload Foto*, atau *Upload Video*.
+2. Di bagian **Sidebar (kiri)**, pilih mode yang kamu inginkan: *Webcam Live*, *Kamera HP*, *Upload Foto*, atau *Upload Video*.
 3. Jika menggunakan Webcam, centang kotak **"Mulai Kamera"**.
 4. Tunjukkan berbagai ekspresi, persentase dan grafik fluktuasi emosi akan diperbarui secara otomatis.
 5. Klik tombol **"📸 Ambil Screenshot"** untuk menyimpan momen saat ini.
